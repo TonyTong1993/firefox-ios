@@ -172,16 +172,11 @@ class BrowserViewController: UIViewController {
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
-        return previousTraitCollection.verticalSizeClass != .compact &&
-               previousTraitCollection.horizontalSizeClass != .regular
+        return previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
     }
 
     func shouldShowTopTabsForTraitCollection(_ newTraitCollection: UITraitCollection) -> Bool {
-        guard AppConstants.MOZ_TOP_TABS else {
-            return false
-        }
-        return newTraitCollection.verticalSizeClass == .regular &&
-            newTraitCollection.horizontalSizeClass == .regular
+        return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
     func toggleSnackBarVisibility(show: Bool) {
@@ -1027,10 +1022,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
-
-        if AppConstants.MOZ_CONTENT_METADATA_PARSING {
-            webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
-        }
+        webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
     }
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
@@ -1940,10 +1932,9 @@ extension BrowserViewController: TabDelegate {
         historyStateHelper.delegate = self
         tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
         
-        if AppConstants.MOZ_CONTENT_METADATA_PARSING {
-            let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-            tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
-        }
+        let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
+        tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
+        
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
